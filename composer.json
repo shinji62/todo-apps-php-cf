@@ -1,0 +1,6 @@
+{
+    "require": {
+        "slim/slim": "2.*",
+        "clickcoder/slim-blade": "dev-master"
+    }
+}

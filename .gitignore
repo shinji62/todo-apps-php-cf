@@ -1,0 +1,5 @@
+/nbproject
+Dockerfile
+composer.phar
+.phpintel
+vendor/*
