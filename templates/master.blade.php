@@ -86,6 +86,7 @@
                     </div>
                     <div class="col-sm-2  text-center">
                         <button class="btn btn-sm btn-success" id="clear-completed" >Clear Competed</button>
+                        <button class="btn btn-sm btn-danger" id="kill" >Kill Instance</button>
                     </div>
 
                 </div><!--/ row -->
@@ -173,6 +174,23 @@
                         location.reload();
                     },
                     type: 'DELETE'
+                });
+            });
+
+
+             //Mark as completed
+            $("#kill").on("click", function () {
+                $.ajax({
+                    url: '/api/kill',
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    error: function () {
+                        $('#warning').html('An error has occurred');
+                    },
+                    success: function () {
+                        location.reload();
+                    },
+                    type: 'GET'
                 });
             });
 
