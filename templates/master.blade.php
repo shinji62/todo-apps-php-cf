@@ -103,7 +103,7 @@
                 <hr>
 
                 <h4 class="text-center">
-                    Etourneau Gwenn @Pivotal 2015
+                    Etourneau Gwenn @Pivotal 2015  Ip: {{isset($vcapInfo["ip"]) ? $vcapInfo["ip"] : "unknow" }} Instance index: {{isset($vcapInfo["index"]) ? $vcapInfo["index"] : "unknow"}} 
                 </h4>
 
                 <hr>

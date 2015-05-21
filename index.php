@@ -6,6 +6,12 @@
  */
 require 'vendor/autoload.php';
 require_once './MongoApp.php';
+
+//Small Helper for CF data
+$vcap_application = array();
+$vcap_application["ip"] = isset($_ENV["CF_INSTANCE_IP"]) ? $_ENV["CF_INSTANCE_IP"] : "unknow";
+$vcap_application["index"] = isset($_ENV["CF_INSTANCE_INDEX"]) ? $_ENV["CF_INSTANCE_INDEX"] : "unknow";
+
 $app = new \Slim\Slim(array(
     'view' => new \Slim\Views\Blade(),
     'templates.path' => './templates',
@@ -17,34 +23,37 @@ $view->parserOptions = array(
     'cache' => dirname(__FILE__) . '/cache-view',
 );
 
-$app->get('/api/todos', function () use ($app) {
+$app->get('/api/todos', function () use ($app, $vcap_application) {
     $app->render('master', array(
         'todolist' => MongoApp::Instance()->get(),
-        'buttonSelected' => "all"
+        'buttonSelected' => "all",
+        'vcapInfo' => $vcap_application
     ));
 });
 
-$app->get('/api/todos/active', function () use ($app) {
+$app->get('/api/todos/active', function () use ($app, $vcap_application) {
     $app->render('master', array(
         'todolist' => MongoApp::Instance()->getQuery(['completed' => false]),
-        'buttonSelected' => "active"
+        'buttonSelected' => "active",
+        'vcapInfo' => $vcap_application
     ));
 });
 
 
-$app->get('/api/todos/completed', function () use ($app) {
+$app->get('/api/todos/completed', function () use ($app, $vcap_application) {
     $app->render('master', array(
         'todolist' => MongoApp::Instance()->getQuery(['completed' => true]),
-        'buttonSelected' => "completed"
+        'buttonSelected' => "completed",
+        'vcapInfo' => $vcap_application
     ));
 });
 
-$app->post('/api/todos', function () use ($app) {
+$app->post('/api/todos', function () use ($app, $vcap_application) {
     $todo = json_decode($app->request()->getBody(), true);
     MongoApp::Instance()->post($todo);
 });
 
-$app->delete('/api/todos/:id', function ($id) use ($app) {
+$app->delete('/api/todos/:id', function ($id) use ($app, $vcap_application) {
     if ($id == "completed") {
         MongoApp::Instance()->deleteQuery(['completed' => true]);
     } else {
