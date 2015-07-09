@@ -24,7 +24,7 @@
         <div id="container">
             <div id="todoapp">
 
-                <h1 class="text-center">Workshop 2015 ToDoMVC
+                <h1 class="text-center">Workshop 2015 ToDoMV
                     <p class="lead">PHP & MongoDB & some bootstrap </p> 
                     <p class="label-danger" id="warning"></p>
                 </h1> 
