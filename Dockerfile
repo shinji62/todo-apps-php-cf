@@ -1,5 +1,7 @@
 FROM tutum/apache-php
 RUN useradd -R / -m -s /bin/bash -ou 0 -g 0 vcap
+RUN usermod -a -G www-data vcap
+RUN usermod -a -G adm vcap
 RUN apt-get update && apt-get install -yq git 
 
 # Installating MONGO
