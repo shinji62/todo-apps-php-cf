@@ -52,7 +52,7 @@ final class MongoApp {
                 }
             }
         }   
-       $this->mongoClient = !empty($mongoClient) ? $mongoClient : MongoClient($this->mongoUrl);
+       $this->mongoClient = !empty($mongoClient) ? $mongoClient : new MongoClient($this->mongoUrl);
         
     }
 
