@@ -26,6 +26,7 @@ final class MongoApp {
     private static $inst = null;
     private $mongoUrl = 'mongodb://localhost:27017';
     private $dbName = 'db';
+    private $mongoClient;
 
     public static function Instance() {
         if (self::$inst === null) {
@@ -34,8 +35,8 @@ final class MongoApp {
         return self::$inst;
     }
 
-    private function __construct() {
-
+    public function __construct($mongoClient = null ) {
+        
         ##Use CF VCAP_SERVICES to get the credential
         if ($vcapStr = getenv('VCAP_SERVICES')) {
             $vcap = json_decode($vcapStr, true);
@@ -50,11 +51,13 @@ final class MongoApp {
                     }
                 }
             }
-        }
+        }   
+       $this->mongoClient = !empty($mongoClient) ? $mongoClient : MongoClient($this->mongoUrl);
+        
     }
 
-    private function getConnection() {
-        return new MongoClient($this->mongoUrl);
+    public function getConnection() {
+        return $this->mongoClient;
     }
 
     private function getTodosCollection($conn) {
@@ -67,7 +70,7 @@ final class MongoApp {
      * Transforms the ToDo JSON from the Mongo DB to the JSON
      * the client will expect.
      */
-    private function toClientToDo($mongoTodo) {
+    public function toClientToDo($mongoTodo) {
         $mongoTodo['id'] = $mongoTodo['_id']->{'$id'};
         unset($mongoTodo['_id']);
         return $mongoTodo;

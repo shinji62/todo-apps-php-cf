@@ -2,5 +2,10 @@
     "require": {
         "slim/slim": "2.*",
         "clickcoder/slim-blade": "dev-master"
+    },
+    
+    "require-dev": {
+        "atoum/atoum": "dev-master"
     }
+
 }
