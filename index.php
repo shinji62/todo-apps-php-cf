@@ -10,7 +10,7 @@ require_once './MongoApp.php';
 //Small Helper for CF data
 $vcap_application = array();
 $vcap_application["ip"] = isset($_ENV["CF_INSTANCE_IP"]) ? $_ENV["CF_INSTANCE_IP"] : "unknow";
-$vcap_application["index"] = isset($_ENV["CF_INSTANCE_INDEX"]) ? $_ENV["CF_INSTANCE_INDEX"] : "unknow";
+$vcap_application["index"] = isset($_ENV["INSTANCE_INDEX"]) ? $_ENV["INSTANCE_INDEX"] : "unknow";
 
 $app = new \Slim\Slim(array(
     'view' => new \Slim\Views\Blade(),

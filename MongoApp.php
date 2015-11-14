@@ -51,7 +51,11 @@ final class MongoApp {
                     }
                 }
             }
-        }   
+        }elseif ($vcapStr = getenv('MONGO_PORT')){
+            $this->mongoUrl = str_replace('tcp', 'mongodb', $vcapStr);
+        }
+        
+        
        $this->mongoClient = !empty($mongoClient) ? $mongoClient : new MongoClient($this->mongoUrl);
         
     }
