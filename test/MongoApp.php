@@ -20,9 +20,6 @@ use atoum;
  */
 class MongoApp extends atoum {
     
-    
-    //public function __construct() {}
-    
     public function TestGetConnection() {
            
            $controller = new \atoum\mock\controller();
@@ -35,7 +32,7 @@ class MongoApp extends atoum {
             // création d'une nouvelle instance de la classe à tester
             ->given($this->newTestedInstance($mongoClientMock))
             ->object($this->testedInstance->getConnection())
-            ->isInstanceOf("\MongoClient");
+            ->isInstanceOf("mock\MongoClient");
                         
     }
 }

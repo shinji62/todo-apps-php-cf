@@ -1,7 +1,6 @@
 ---
 applications:
-- name: todo-apps
+- name: todo-apps-ge
   memory: 256M
   instances: 1
   host: todo-apps
-  domain: 10.244.0.34.xip.io

@@ -1,0 +1,52 @@
+---
+groups:
+- name: pull-request
+  jobs:
+  - job-unit-testing
+
+
+jobs:
+- name: checking-pr
+  public: true
+  serial: true
+  plan:
+    - { get: resource-todo-pr, trigger: true }
+- name: job-unit-testing
+  public: true
+  serial: true
+  plan:
+  - get: resource-todo-pr 
+    trigger: true
+    passed: [checking-pr]
+  - put: resource-todo-pr
+    params:
+      path: resource-todo-pr 
+      status: pending
+  - task: php-test-web-app
+    config:
+      platform: linux
+      image: {{docker-rep}}
+      inputs:
+        - name: resource-todo-pr
+      run:
+        path: resource-todo-pr/ci/run_test.sh
+    on_failure:
+      put: resource-todo-pr
+      params:
+        path: resource-todo-pr
+        status: failure
+  - put: resource-todo-pr
+    params:
+      path: resource-todo-pr
+      status: success
+
+
+resources:
+
+- name: resource-todo-pr
+  type: pull-request
+  source:
+    access_token: {{github-access-token}}
+    private_key: {{private-key-github-concourse}}
+    repo: shinji62/todo-apps-php-cf
+    base_url: http://concourse.shinji62.ovh/
