@@ -7,6 +7,9 @@ jobs:
   - get: resource-todo-app
     trigger: true
   - task: php-test-web-app
+    config:
+      params:
+        GITHUB_TOKEN: {{github-token}}
     file: resource-todo-app/ci/task/run-test.yml
 
 
@@ -22,7 +25,8 @@ jobs:
     params:
       manifest: resource-todo-app/manifest.yml
       path: resource-todo-app/
-      current_app_name: todo-apps-ge 
+      environment_variables:
+        COMPOSER_GITHUB_OAUTH_TOKEN: {{github-token}} 
 
 resources:
 

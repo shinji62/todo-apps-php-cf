@@ -29,6 +29,9 @@ jobs:
       path: resource-todo-app 
       status: pending
   - task: php-test-web-app
+    config:
+      params:
+        GITHUB_TOKEN: {{github-token}}
     file: resource-todo-app/ci/task/run-test.yml
     on_failure:
       put: resource-todo-app

@@ -10,12 +10,14 @@ image_resource:
 inputs:
   - name: resource-todo-app
     
-
+params:
+  GITHUB_TOKEN:
 run:
-  path: bash
+  path: bash	
   args: 
   - -c 
   - |
     cd resource-todo-*/
+    composer config -g github-oauth.github.com $GITHUB_TOKEN
     composer install
     atoum -ulr -d test ++verbose
