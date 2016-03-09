@@ -1,0 +1,77 @@
+---
+groups:
+- name: php-buildpack
+  jobs:
+  - start-job
+  - job-unit-testing
+  - deploy-to-pws
+
+
+
+
+
+jobs:
+- name: job-unit-testing
+  public: true
+  serial: true
+  plan:
+  - get: resource-todo-app
+    trigger: true
+  - task: php-test-web-app
+    file: resource-todo-app/ci/task/run-test.yml
+
+
+
+- name: deploy-to-pws
+  public: true
+  serial: true
+  plan:
+  - get: resource-todo-app
+    trigger: true
+    passed: [job-unit-testing]
+  - put: deploy-to-pws
+    params:
+      manifest: resource-todo-app/manifest.yml
+      path: resource-todo-app/
+      current_app_name: todo-apps-ge 
+
+resources:
+
+- name: resource-todo-app
+  type: git
+  source:
+    uri: https://github.com/shinji62/todo-apps-php-cf.git
+    branch: feature/adding_concourse_pipeline
+
+- name: interval-trigger
+  type: time
+  source:
+    interval: 2m # average build time for the integration tests
+
+
+- name: deploy-to-pws
+  type: cf
+  source:
+    api: https://api.run.pivotal.io
+    username: {{pws-username}}
+    password: {{pws-password}}
+    organization: {{pws-org}}
+    space: {{pws-space}}
+    skip_cert_check: false
+
+
+- &version 
+  name: version-todo
+  type: semver
+  source:
+    initial_version: 0.0.0
+    driver: git
+    uri: git@github.com:shinji62/version-concourse.git
+    branch: master
+    file: todo-apps-php-cf/version
+    private_key: {{private-key-github-concourse}}
+
+- <<: *version
+  name: version-other
+  source:
+    file: todo-apps-php-cf-other/version 

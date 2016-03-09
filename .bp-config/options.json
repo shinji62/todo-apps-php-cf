@@ -1,3 +1,4 @@
-{
-    "PHP_EXTENSIONS": ["bz2", "zlib", "curl", "mcrypt", "mongo"]
+{   
+    "PHP_VERSION": "{PHP_56_LATEST}", 
+    "PHP_EXTENSIONS": ["bz2", "zlib", "curl", "mcrypt","mongo"]
 }

@@ -1,0 +1,23 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: atoum/atoum
+
+
+inputs:
+  - name: resource-todo-app
+    
+params:
+  GITHUB_TOKEN:
+run:
+  path: bash	
+  args: 
+  - -c 
+  - |
+    cd resource-todo-*/
+    composer config -g github-oauth.github.com $GITHUB_TOKEN
+    composer install
+    atoum -ulr -d test ++verbose

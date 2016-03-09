@@ -1,0 +1,57 @@
+---
+resource_types:
+- name: pull-request
+  type: docker-image
+  source:
+    repository: jtarchie/pr
+
+groups:
+- name: pull-request
+  jobs:
+  - job-unit-testing
+
+
+jobs:
+- name: checking-pr
+  public: true
+  serial: true
+  plan:
+    - { get: resource-todo-app, trigger: true }
+- name: job-unit-testing
+  public: true
+  serial: true
+  plan:
+  - get: resource-todo-app
+    trigger: true
+    passed: [checking-pr]
+  - put: resource-todo-app
+    params:
+      path: resource-todo-app 
+      status: pending
+  - task: php-test-web-app
+    config:
+      params:
+        GITHUB_TOKEN: {{github-token}}
+    file: resource-todo-app/ci/task/run-test.yml
+    on_failure:
+      put: resource-todo-app
+      params:
+        path: resource-todo-app
+        status: failure
+  - put: resource-todo-app
+    params:
+      path: resource-todo-app
+      status: success
+
+
+resources:
+
+- name: resource-todo-app
+  type: pull-request
+  source:
+    access_token: {{github-access-token}}
+    private_key: {{private-key-github-concourse}}
+    repo: shinji62/todo-apps-php-cf
+    base_url: http://concourse.shinji62.ovh/
+
+
